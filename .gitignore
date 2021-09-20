@@ -1,3 +1,9 @@
+# replit
+.replit
+
+# packages
+package-lock.json
+
 # Logs
 logs
 *.log

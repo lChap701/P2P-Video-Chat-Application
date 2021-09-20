@@ -21,5 +21,11 @@
   "bugs": {
     "url": "https://github.com/lChap701/P2P-Video-Chat-Application/issues"
   },
-  "homepage": "https://github.com/lChap701/P2P-Video-Chat-Application#readme"
+  "homepage": "https://github.com/lChap701/P2P-Video-Chat-Application#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "peer": "^0.6.1",
+    "socket.io": "^4.2.0"
+  }
 }

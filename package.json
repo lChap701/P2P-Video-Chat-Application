@@ -4,7 +4,8 @@
   "description": "This project was created to earn a certificate from freeCodeCamp and it allows users to chat with other people.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "start": "node index.js",
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",

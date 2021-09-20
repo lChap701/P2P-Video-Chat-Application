@@ -1,0 +1,25 @@
+{
+  "name": "p2p-video-chat-application",
+  "version": "1.0.0",
+  "description": "This project was created to earn a certificate from freeCodeCamp and it allows users to chat with other people.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lChap701/P2P-Video-Chat-Application.git"
+  },
+  "keywords": [
+    "Video",
+    "Chat",
+    "Node.js",
+    "Express"
+  ],
+  "author": "Lucas Chapman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lChap701/P2P-Video-Chat-Application/issues"
+  },
+  "homepage": "https://github.com/lChap701/P2P-Video-Chat-Application#readme"
+}

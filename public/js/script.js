@@ -2,18 +2,25 @@
  * Gets the name of the room or prepares to access video and audio
  */
 window.onload = () => {
-  const H2 = document.querySelector("#video-container h2");
+  const roomEl = document.querySelector("#video-container h2");
 
-  if (H2.innerHTML.split(" ")[1] == "") {
-    let answer = window.prompt("Please enter the name of this room", "None");
+  if (roomEl.innerText == "") {
+    let room = window.prompt("Please enter the name of this room", "Room-1");
 
-    if (answer == null) {
+    if (room == null) {
       window.location.reload();
     } else {
-      window.location.pathname += answer;
+      window.location.pathname += room.replace(new RegExp(" ", "g"), "-");
     }
   } else {
-    accessVideo();
+    let username = window.prompt("Please enter your username", "john-smith");
+
+    if (username == null) {
+      window.location.reload();
+    } else {
+      console.log(username.replace(new RegExp(" ", "g"), "-"));
+      accessVideo();
+    }
   }
 };
 

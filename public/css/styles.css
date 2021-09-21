@@ -1,0 +1,125 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  color: #fff;
+}
+
+body > header {
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+  background: #111;
+}
+
+video {
+  height: 300px;
+  border-radius: 1rem;
+  margin: 0.5rem;
+  width: 400px;
+  object-fit: cover;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  background: #108ffd;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#flex {
+  height: 90vh;
+  display: flex;
+  overflow: hidden;
+}
+
+#video-container {
+  flex-grow: 1;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  height: 100%;
+}
+
+#videos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 75vh;
+}
+
+#options {
+  width: 100%;
+  background: #111;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  height: 15vh;
+  padding: 0 10px;
+}
+
+#options button:nth-child(2) {
+  margin-left: 10px;
+}
+
+#options button:last-child {
+  display: flex;
+  margin-left: auto;
+}
+
+#message-container {
+  flex: 1;
+  background: #333;
+  height: 100%;
+}
+
+#messages {
+  height: 80vh;
+  width: 100%;
+}
+
+#message-control {
+  height: 10vh;
+  padding: 10px;
+  display: flex;
+}
+
+input {
+  font-family: inherit;
+  display: inline-block;
+  width: 100%;
+  border: 2px solid #eee;
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+input:focus {
+  outline: none;
+}
+
+input:hover,
+input:focus {
+  border-color: #0267bf !important;
+}

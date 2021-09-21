@@ -35,6 +35,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
     <script src="/js/script.js" defer></script>
   </head>
   <body>
@@ -44,7 +46,9 @@
 
     <main id="flex">
       <section id="video-container">
-        <h2>Room: <%= room == null ? "" : room.trim() %></h2>
+        <h2>
+          <i class="far fa-comment fa-flip-horizontal"></i> <%= room.trim() %>
+        </h2>
 
         <!-- Adds videos via JS script -->
         <div id="videos"></div>
@@ -57,10 +61,9 @@
       </section>
 
       <section id="message-container">
-        <header>
-          <div id="user-wrap"></div>
-          <h2 id="user"></h2>
-        </header>
+        <div id="user-wrap">
+          <h2><i class="far fa-user-circle"></i> Me</h2>
+        </div>
 
         <!-- Added via JS script -->
         <div id="messages"></div>

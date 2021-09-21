@@ -21,6 +21,10 @@ header {
   background: #111;
 }
 
+h2 {
+  margin: 0;
+}
+
 video {
   height: 300px;
   border-radius: 1rem;
@@ -97,12 +101,18 @@ button {
   height: 100%;
 }
 
+#user-wrap {
+  height: 5vh;
+  padding: 10px;
+}
+
 #messages {
-  height: 80vh;
+  height: 75vh;
   width: 100%;
 }
 
 #message-control {
+  flex: 1;
   height: 10vh;
   padding: 10px;
   display: flex;

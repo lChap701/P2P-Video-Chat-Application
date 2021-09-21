@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, intitial-scale=1" />
+    <meta name="description" content="A two person video chat room" />
+    <meta property="og:title" content="P2P Video Chat" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon.io/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon.io/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon.io/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/favicon.io/site.webmanifest" />
+    <title>P2P Video Chat Application</title>
+    <script
+      src="https://kit.fontawesome.com/855ee508c4.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+    <script src="/js/script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>P2P Video Chat Room</h1>
+    </header>
+
+    <main id="flex">
+      <section id="video-container">
+        <h2>Room: <%= room == null ? "" : room.trim() %></h2>
+
+        <!-- Adds videos via JS script -->
+        <div id="videos"></div>
+
+        <div id="options">
+          <button><i class="fas fa-video fa-lg"></i></button>
+          <button><i class="fas fa-microphone fa-lg"></i></button>
+          <button><i class="fas fa-user-plus fa-lg"></i></button>
+        </div>
+      </section>
+
+      <section id="message-container">
+        <header>
+          <div id="user-wrap"></div>
+          <h2 id="user"></h2>
+        </header>
+
+        <!-- Added via JS script -->
+        <div id="messages"></div>
+
+        <div id="message-control">
+          <input
+            type="text"
+            name="message"
+            placeholder="Type your message here..."
+          />
+          <button><i class="fas fa-plus fa-lg"></i></button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

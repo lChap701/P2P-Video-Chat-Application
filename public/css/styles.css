@@ -1,3 +1,13 @@
+:root {
+  --text-color: #fff;
+  --border-color-main: #eee;
+  --border-color-secondary: #0267bf;
+  --dark-grey: #111;
+  --medium-dark-grey: #222;
+  --light-dark-grey: #333;
+  --btn-bg: #108ffd;
+}
+
 *,
 *::before,
 *::after {
@@ -5,9 +15,18 @@
   margin: 0;
 }
 
+:focus {
+  outline: none;
+}
+
+:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
 body {
   font-family: "Open Sans", sans-serif;
-  color: #fff;
+  color: var(--text-color);
 }
 
 body > header {
@@ -18,11 +37,11 @@ body > header {
 }
 
 header {
-  background: #111;
+  background: var(--dark-grey);
 }
 
 h2 {
-  margin: 0;
+  height: 5vh;
 }
 
 video {
@@ -42,10 +61,15 @@ button {
   cursor: pointer;
   color: inherit;
   font-family: inherit;
-  background: #108ffd;
+  background: var(--btn-bg);
   border: none;
   padding: 10px;
   border-radius: 5px;
+}
+
+button:hover,
+button:focus {
+  filter: brightness(80%);
 }
 
 #flex {
@@ -55,12 +79,12 @@ button {
 }
 
 #video-container {
-  flex-grow: 1;
+  flex: 0.7;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
-  background: #222;
+  background: var(--medium-dark-grey);
   height: 100%;
 }
 
@@ -68,7 +92,6 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   height: 75vh;
 }
 
@@ -78,7 +101,7 @@ button {
 
 #options {
   width: 100%;
-  background: #111;
+  background: var(--dark-grey);
   display: flex;
   align-items: center;
   flex: 1;
@@ -96,14 +119,13 @@ button {
 }
 
 #message-container {
-  flex: 1;
-  background: #333;
+  flex: 0.3;
+  background: var(--light-dark-grey);
   height: 100%;
 }
 
-#user-wrap {
-  height: 5vh;
-  padding: 10px;
+#message-container h2 {
+  padding: 0 10px;
 }
 
 #messages {
@@ -122,17 +144,13 @@ input {
   font-family: inherit;
   display: inline-block;
   width: 100%;
-  border: 2px solid #eee;
+  border: 2px solid var(--border-color-main);
   padding: 10px;
   border-radius: 5px;
   margin-right: 10px;
 }
 
-input:focus {
-  outline: none;
-}
-
 input:hover,
 input:focus {
-  border-color: #0267bf !important;
+  border-color: var(--border-color-secondary);
 }

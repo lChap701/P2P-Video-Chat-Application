@@ -20,7 +20,7 @@
 }
 
 :disabled {
-  opacity: 0.8;
+  opacity: 0.5;
   cursor: default;
 }
 
@@ -67,7 +67,11 @@ button {
   border-radius: 5px;
 }
 
-button:hover,
+button.bg-red {
+  background: #f00;
+}
+
+button:not(:disabled):hover,
 button:focus {
   filter: brightness(80%);
 }
@@ -93,6 +97,7 @@ button:focus {
   align-items: center;
   justify-content: center;
   height: 75vh;
+  padding: 0 10px;
 }
 
 #videos video:nth-child(2) {
@@ -124,13 +129,36 @@ button:focus {
   height: 100%;
 }
 
-#message-container h2 {
+#messages {
+  height: 80vh;
+  width: 100%;
   padding: 0 10px;
+  overflow: auto;
 }
 
-#messages {
-  height: 75vh;
-  width: 100%;
+.message {
+  display: flex;
+  flex-direction: column;
+}
+
+.message > b {
+  color: #eee;
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+  font-size: 1.5rem;
+}
+
+.message > b > i {
+  margin-right: 0.7rem;
+}
+
+.message > span {
+  color: #000;
+  background-color: #eee;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 #message-control {
@@ -138,13 +166,14 @@ button:focus {
   height: 10vh;
   padding: 10px;
   display: flex;
+  background: var(--medium-dark-grey);
 }
 
 input {
   font-family: inherit;
   display: inline-block;
   width: 100%;
-  border: 2px solid var(--border-color-main);
+  border: 1px solid var(--border-color-main);
   padding: 10px;
   border-radius: 5px;
   margin-right: 10px;

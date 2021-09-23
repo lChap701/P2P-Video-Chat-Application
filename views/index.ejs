@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, intitial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="A two person video chat room" />
     <meta property="og:title" content="P2P Video Chat" />
     <link
@@ -35,9 +35,6 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/css/styles.css" type="text/css" />
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
-    <script src="/js/script.js" defer></script>
   </head>
   <body>
     <header>
@@ -51,20 +48,24 @@
         </h2>
 
         <!-- Adds videos via JS script -->
-        <div id="videos"></div>
+        <div id="videos">
+          <video id="localVideo" playsinline autoplay muted></video>
+          <video
+            id="remoteVideo"
+            playsinline
+            autoplay
+            style="display: none"
+          ></video>
+        </div>
 
         <div id="options">
-          <button><i class="fas fa-video fa-lg"></i></button>
-          <button><i class="fas fa-microphone fa-lg"></i></button>
-          <button><i class="fas fa-user-plus fa-lg"></i></button>
+          <button id="video"><i class="fas fa-video fa-lg"></i></button>
+          <button id="audio"><i class="fas fa-microphone fa-lg"></i></button>
+          <button id="invite"><i class="fas fa-user-plus fa-lg"></i></button>
         </div>
       </section>
 
       <section id="message-container">
-        <div id="user-wrap">
-          <h2><i class="far fa-user-circle"></i> Me</h2>
-        </div>
-
         <!-- Added via JS script -->
         <div id="messages"></div>
 
@@ -72,11 +73,17 @@
           <input
             type="text"
             name="message"
+            autocomplete="off"
             placeholder="Type your message here..."
           />
-          <button><i class="fas fa-plus fa-lg"></i></button>
+          <button id="send"><i class="fas fa-plus fa-lg"></i></button>
         </div>
       </section>
     </main>
+    <script>
+      const ROOM = "<%= room %>";
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/script.js"></script>
   </body>
 </html>

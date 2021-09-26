@@ -35,6 +35,7 @@ app.get("/:room", (req, res) => {
       connectedUsers = connectedUsers.filter(
         (user) => user.id !== socket.id && user.room == req.params.room
       );
+      
       socket.broadcast.emit("updateUserList", {
         users: connectedUsers,
       });

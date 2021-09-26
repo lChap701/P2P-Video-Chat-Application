@@ -139,6 +139,9 @@ button:focus {
 .message {
   display: flex;
   flex-direction: column;
+  max-width: 28.5vw;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 
 .message > b {

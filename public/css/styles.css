@@ -2,11 +2,13 @@
   --text-color: #fff;
   --border-color-main: #eee;
   --border-color-secondary: #0267bf;
+  --black: #000;
   --dark-grey: #111;
   --medium-dark-grey: #222;
   --light-dark-grey: #333;
-  --video-bg: #000;
   --btn-bg: #108ffd;
+  --bg-red: #f00;
+  --msg-color: #eee;
 }
 
 *,
@@ -46,7 +48,7 @@ h2 {
 }
 
 video {
-  background: var(--video-bg);
+  background: var(--black);
   height: 300px;
   border-radius: 1rem;
   width: 400px;
@@ -70,7 +72,7 @@ button {
 }
 
 button.bg-red {
-  background: #f00;
+  background: var(--bg-red);
 }
 
 button:not(:disabled):hover,
@@ -147,7 +149,7 @@ button:focus {
 }
 
 .message > b {
-  color: #eee;
+  color: var(--msg-color);
   display: flex;
   align-items: center;
   text-transform: capitalize;
@@ -159,8 +161,8 @@ button:focus {
 }
 
 .message > span {
-  color: #000;
-  background-color: #eee;
+  color: var(--black);
+  background: var(--msg-color);
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;

@@ -5,6 +5,7 @@
   --dark-grey: #111;
   --medium-dark-grey: #222;
   --light-dark-grey: #333;
+  --video-bg: #000;
   --btn-bg: #108ffd;
 }
 
@@ -45,6 +46,7 @@ h2 {
 }
 
 video {
+  background: var(--video-bg);
   height: 300px;
   border-radius: 1rem;
   width: 400px;

@@ -131,7 +131,7 @@ socket.on("roomFull", () => {
   location.pathname = "/";
 });
 
-/* Gets the new user */
+/* Gets the all users in the room */
 socket.on("updateUserList", async ({ users }) => {
   console.log(users);
 

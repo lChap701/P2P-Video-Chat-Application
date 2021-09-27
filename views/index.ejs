@@ -47,7 +47,9 @@
     <main id="flex">
       <section id="video-container">
         <h2>
+          <% if (room.trim().length > 0) { %>
           <i class="far fa-comment fa-flip-horizontal"></i> <%= room.trim() %>
+          <% } %>
         </h2>
 
         <!-- Loads videos via JS script -->

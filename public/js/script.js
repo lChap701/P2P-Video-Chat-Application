@@ -116,7 +116,6 @@ const prompts = () => {
 /* Tells the user that the room is full */
 socket.on("roomFull", () => {
   alert("This room is full");
-  location.pathname = "/";
 });
 
 /* Gets the new user */
@@ -127,6 +126,8 @@ socket.on("updateUserList", async ({ users }) => {
     invite.disabled = true;
     newUser = users.filter((user) => user.id !== socket.id)[0];
     await addUser();
+  } else if (users.length > 2) {
+    socket.emit("removeUser");
   } else {
     invite.disabled = false;
     remoteVideo.style.display = "none";

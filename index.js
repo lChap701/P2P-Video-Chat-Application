@@ -44,16 +44,6 @@ app.get("/:room", (req, res) => {
     });
 
     socket.on("joinRoom", (room, username) => {
-      const clients = io.sockets.adapter.rooms.get(room);
-      const numClients = clients ? clients.size : 0;
-      console.log(numClients);
-
-      // Checks if the room is full
-      if (numClients === 2) {
-        socket.emit("roomFull");
-        return;
-      }
-
       socket.join(room);
 
       let result =
@@ -71,15 +61,18 @@ app.get("/:room", (req, res) => {
 
       console.log(connectedUsers);
 
-      socket.on("message", (message) => {
-        io.to(room).emit("createMessage", message, socket.id, username);
-      });
-
       socket.on("requestUserList", () => {
         io.to(room).emit("updateUserList", {
           users: connectedUsers.filter((user) => user.room == room),
         });
       });
+
+      /*socket.on("removeUser", () => {
+        socket.leave(room);
+        connectedUsers = connectedUsers.filter((user) => user.id != socket.id);
+        socket.emit("roomFull");
+        console.log(connectedUsers);
+      });*/
 
       socket.on("mediaOffer", (data) => {
         socket.to(data.to).emit("mediaOffer", {
@@ -99,6 +92,10 @@ app.get("/:room", (req, res) => {
         socket.to(data.to).emit("remotePeerIceCandidate", {
           candidate: data.candidate,
         });
+      });
+
+      socket.on("message", (message) => {
+        io.to(room).emit("createMessage", message, socket.id, username);
       });
     });
   });

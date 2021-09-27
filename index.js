@@ -35,7 +35,7 @@ app.get("/:room", (req, res) => {
       connectedUsers = connectedUsers.filter(
         (user) => user.id !== socket.id && user.room == req.params.room
       );
-      
+
       socket.broadcast.emit("updateUserList", {
         users: connectedUsers,
       });
@@ -44,58 +44,62 @@ app.get("/:room", (req, res) => {
     });
 
     socket.on("joinRoom", (room, username) => {
-      // Checks if the user should join the room
-      if (connectedUsers.filter((user) => user.room == room).length < 2) {
-        socket.join(room);
+      const clients = io.sockets.adapter.rooms.get(room);
+      const numClients = clients ? clients.size : 0;
+      console.log(numClients);
 
-        let res =
-          connectedUsers.length > 0
-            ? connectedUsers.find((user) => user.id === socket.id)
-            : undefined;
-
-        if (res == undefined) {
-          connectedUsers.push({
-            id: socket.id,
-            username: username,
-            room: room,
-          });
-        }
-
-        console.log(connectedUsers);
-
-        let usersInRoom = connectedUsers.filter((user) => user.room == room);
-
-        socket.on("message", (message) => {
-          io.to(room).emit("createMessage", message, socket.id, username);
-        });
-
-        socket.on("requestUserList", () => {
-          socket.emit("updateUserList", { users: usersInRoom });
-          socket.broadcast.emit("updateUserList", { users: usersInRoom });
-        });
-
-        socket.on("mediaOffer", (data) => {
-          socket.to(data.to).emit("mediaOffer", {
-            from: data.from,
-            offer: data.offer,
-          });
-        });
-
-        socket.on("mediaAnswer", (data) => {
-          socket.to(data.to).emit("mediaAnswer", {
-            from: data.from,
-            answer: data.answer,
-          });
-        });
-
-        socket.on("iceCandidate", (data) => {
-          socket.to(data.to).emit("remotePeerIceCandidate", {
-            candidate: data.candidate,
-          });
-        });
-      } else {
+      // Checks if the room is full
+      if (numClients === 2) {
         socket.emit("roomFull");
+        return;
       }
+
+      socket.join(room);
+
+      let result =
+        connectedUsers.length > 0
+          ? connectedUsers.find((user) => user.id === socket.id)
+          : undefined;
+
+      if (result == undefined) {
+        connectedUsers.push({
+          id: socket.id,
+          username: username,
+          room: room,
+        });
+      }
+
+      console.log(connectedUsers);
+
+      socket.on("message", (message) => {
+        io.to(room).emit("createMessage", message, socket.id, username);
+      });
+
+      socket.on("requestUserList", () => {
+        io.to(room).emit("updateUserList", {
+          users: connectedUsers.filter((user) => user.room == room),
+        });
+      });
+
+      socket.on("mediaOffer", (data) => {
+        socket.to(data.to).emit("mediaOffer", {
+          from: data.from,
+          offer: data.offer,
+        });
+      });
+
+      socket.on("mediaAnswer", (data) => {
+        socket.to(data.to).emit("mediaAnswer", {
+          from: data.from,
+          answer: data.answer,
+        });
+      });
+
+      socket.on("iceCandidate", (data) => {
+        socket.to(data.to).emit("remotePeerIceCandidate", {
+          candidate: data.candidate,
+        });
+      });
     });
   });
 

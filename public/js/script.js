@@ -69,10 +69,26 @@ audio.addEventListener("click", () => {
   audio.classList.toggle("bg-red");
 });
 
+/* Accesses video and audio, displays prompts, and gets the initial users in the room */
+socket.on("connect", () => {
+  navigator.mediaDevices
+    .getUserMedia({
+      audio: true,
+      video: true,
+    })
+    .then((stream) => {
+      myVideoStream = stream;
+      document.querySelector("#localVideo").srcObject = stream;
+      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
+      prompts();
+    })
+    .catch((err) => alert(err));
+});
+
 /**
- * Gets the name of the room or prepares to access video and audio
+ * Gets the name of the room and the username
  */
-const init = () => {
+const prompts = () => {
   if (document.querySelector("#video-container h2").innerText == "") {
     let room = prompt("Please enter the name of this room", "Room-1");
 
@@ -87,36 +103,21 @@ const init = () => {
     if (username == null) {
       location.reload();
     } else {
-      accessVideo(username.replace(new RegExp(" ", "g"), "-"));
+      socket.emit(
+        "joinRoom",
+        ROOM,
+        username.replace(new RegExp(" ", "g"), "-")
+      );
+      socket.emit("requestUserList");
     }
   }
 };
 
-/**
- * Access the camera and microphone
- * @param {string} username   Represents the username that was chosen
- */
-function accessVideo(username) {
-  navigator.mediaDevices
-    .getUserMedia({
-      audio: true,
-      video: true,
-    })
-    .then((stream) => {
-      myVideoStream = stream;
-      document.querySelector("#localVideo").srcObject = stream;
-      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
-
-      socket.emit("joinRoom", ROOM, username);
-      socket.emit("requestUserList");
-    })
-    .catch((err) => alert(err));
-}
-
-/*
- * Displays prompts, accesses video, and gets the initial users
- */
-socket.on("connect", init);
+/* Tells the user that the room is full */
+socket.on("roomFull", () => {
+  alert("This room is full");
+  location.pathname = "/";
+});
 
 /* Gets the new user */
 socket.on("updateUserList", async ({ users }) => {

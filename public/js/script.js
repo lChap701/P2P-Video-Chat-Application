@@ -82,9 +82,7 @@ socket.on("connect", () => {
       stream.getTracks().forEach((track) => peer.addTrack(track, stream));
       prompts();
     })
-    .catch((err) => {
-      alert(err);
-    });
+    .catch((err) => alert(err));
 });
 
 /**

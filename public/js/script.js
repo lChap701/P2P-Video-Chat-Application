@@ -171,7 +171,6 @@ const onMediaOffer = async (data) => {
   try {
     console.log("onMediaOffer");
     console.log(socket.id);
-    console.log(data.offer);
     await peer.setRemoteDescription(data.offer);
     const peerAnswer = await peer.createAnswer();
     await peer.setLocalDescription(peerAnswer);

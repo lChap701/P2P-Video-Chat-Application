@@ -25,82 +25,86 @@ app.get("/", (req, res) => {
   res.render("index", { room: "" });
 });
 
+// Display index.ejs with the room that was entered
+app.get("/:room", (req, res) => {
+  res.render("index", { room: req.params.room });
+});
+
 // Array of users connected to a room
 let connectedUsers = [];
 
-// Display index.ejs with the room that was entered
-app.get("/:room", (req, res) => {
-  io.on("connection", (socket) => {
-    socket.on("disconnect", () => {
-      connectedUsers = connectedUsers.filter(
-        (user) => user.id !== socket.id && user.room == req.params.room
-      );
+io.on("connection", (socket) => {
+  socket.on("disconnect", () => {
+    connectedUsers = connectedUsers.filter((user) => user.id !== socket.id);
 
-      socket.broadcast.emit("updateUserList", {
-        users: connectedUsers,
-      });
-
-      console.log(connectedUsers);
+    socket.broadcast.emit("updateUserList", {
+      users: connectedUsers,
     });
 
-    socket.on("joinRoom", (room, username) => {
-      socket.join(room);
-
-      let result =
-        connectedUsers.length > 0
-          ? connectedUsers.find((user) => user.id === socket.id)
-          : undefined;
-
-      if (result == undefined) {
-        connectedUsers.push({
-          id: socket.id,
-          username: username,
-          room: room,
-        });
-      }
-
-      console.log(connectedUsers);
-
-      socket.on("requestUserList", () => {
-        io.to(room).emit("updateUserList", {
-          users: connectedUsers.filter((user) => user.room == room),
-        });
-      });
-
-      /*socket.on("removeUser", () => {
-        socket.leave(room);
-        connectedUsers = connectedUsers.filter((user) => user.id != socket.id);
-        socket.emit("roomFull");
-        console.log(connectedUsers);
-      });*/
-
-      socket.on("mediaOffer", (data) => {
-        socket.to(data.to).emit("mediaOffer", {
-          from: data.from,
-          offer: data.offer,
-        });
-      });
-
-      socket.on("mediaAnswer", (data) => {
-        socket.to(data.to).emit("mediaAnswer", {
-          from: data.from,
-          answer: data.answer,
-        });
-      });
-
-      socket.on("iceCandidate", (data) => {
-        socket.to(data.to).emit("remotePeerIceCandidate", {
-          candidate: data.candidate,
-        });
-      });
-
-      socket.on("message", (message) => {
-        io.to(room).emit("createMessage", message, socket.id, username);
-      });
-    });
+    console.log(connectedUsers);
   });
 
-  res.render("index", { room: req.params.room });
+  socket.on("joinRoom", (room, username) => {
+    socket.join(room);
+
+    let result =
+      connectedUsers.length > 0
+        ? connectedUsers.find((user) => user.id === socket.id)
+        : undefined;
+
+    if (result == undefined) {
+      connectedUsers.push({
+        id: socket.id,
+        username: username,
+        room: room,
+      });
+    }
+
+    console.log(connectedUsers);
+
+    socket.on("requestUserList", () => {
+      io.to(room).emit("updateUserList", {
+        users: connectedUsers.filter((user) => user.room == room),
+      });
+    });
+
+    socket.on("removeUser", (user) => {
+      if (
+        socket.id === user.id &&
+        connectedUsers.filter((u) => u.room === user.room).length > 2
+      ) {
+        console.log("user left");
+        socket.leave(user.room);
+        connectedUsers = connectedUsers.filter((u) => u.id != user.id);
+      }
+
+      socket.to(user.id).emit("roomFull");
+    });
+
+    socket.on("mediaOffer", (data) => {
+      socket.to(data.to).emit("mediaOffer", {
+        from: data.from,
+        offer: data.offer,
+      });
+    });
+
+    socket.on("mediaAnswer", (data) => {
+      socket.to(data.to).emit("mediaAnswer", {
+        from: data.from,
+        answer: data.answer,
+      });
+    });
+
+    socket.on("iceCandidate", (data) => {
+      socket.to(data.to).emit("remotePeerIceCandidate", {
+        candidate: data.candidate,
+      });
+    });
+
+    socket.on("message", (message) => {
+      io.to(room).emit("createMessage", message, socket.id, username);
+    });
+  });
 });
 
 // Sets the port used to access my app

@@ -82,40 +82,55 @@ socket.on("connect", () => {
       stream.getTracks().forEach((track) => peer.addTrack(track, stream));
       prompts();
     })
-    .catch((err) => alert(err));
+    .catch((err) => {
+      alert(err);
+    });
 });
 
 /**
- * Gets the name of the room and the username
+ * Displays prompts that gets the name of the room and the username or connects to a room
  */
 const prompts = () => {
+  // Checks if the user has joined a room
   if (document.querySelector("#video-container h2").innerText == "") {
     let room = prompt("Please enter the name of this room", "Room-1");
 
-    if (room == null || room.trim().length == 0) {
-      location.reload();
-    } else {
-      location.pathname += room.replace(new RegExp(" ", "g"), "-");
-    }
-  } else {
-    let username = prompt("Please enter your username", "john-smith");
+    // Room Validation
+    if (room == null || room.trim().length == 0) location.reload();
 
-    if (username == null) {
-      location.reload();
+    // Gets the desired username
+    let username = localStorage.getItem("username");
+
+    // Checks if the user has entered a username or if the username should change
+    if (localStorage.getItem("username")) {
+      if (!confirm("Do you wish to keep your username?")) {
+        username = prompt("Please enter your new username", username);
+      }
     } else {
-      socket.emit(
-        "joinRoom",
-        ROOM,
-        username.replace(new RegExp(" ", "g"), "-")
-      );
-      socket.emit("requestUserList");
+      username = prompt("Please enter your username", "john-smith");
     }
+
+    // Username Validation
+    if (username == null || username.trim().length == 0) location.reload();
+
+    // Saves username in localStorage
+    localStorage.setItem(
+      "username",
+      username.replace(new RegExp(" ", "g"), "-")
+    );
+
+    // Redirects to the room
+    location.pathname += room.replace(new RegExp(" ", "g"), "-");
+  } else {
+    socket.emit("joinRoom", ROOM, localStorage.getItem("username"));
+    socket.emit("requestUserList");
   }
 };
 
 /* Tells the user that the room is full */
 socket.on("roomFull", () => {
   alert("This room is full");
+  location.pathname = "/";
 });
 
 /* Gets the new user */
@@ -127,7 +142,7 @@ socket.on("updateUserList", async ({ users }) => {
     newUser = users.filter((user) => user.id !== socket.id)[0];
     await addUser();
   } else if (users.length > 2) {
-    socket.emit("removeUser");
+    socket.emit("removeUser", users[users.length - 1]);
   } else {
     invite.disabled = false;
     remoteVideo.style.display = "none";

@@ -47,6 +47,14 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", (room, username) => {
     socket.join(room);
 
+    // Clear previous messages when no one is in the room
+    if (
+      connectedUsers.filter((user) => user.room === room).length == 0 ||
+      connectedUsers.length == 0
+    ) {
+      userMessages = userMessages.filter((obj) => obj.room !== room);
+    }
+
     // Checks if a new users has been connected
     let result =
       connectedUsers.length > 0

@@ -34,21 +34,26 @@ app.get("/:room", (req, res) => {
 let connectedUsers = []; // Array of users connected to a room
 let userMessages = []; // Array of messages
 
+// Creates listeners for all sockets
 io.on("connection", (socket) => {
+  // Removes the user that left from connectedUsers
   socket.on("disconnect", () => {
     connectedUsers = connectedUsers.filter((user) => user.id !== socket.id);
     socket.broadcast.emit("updateUserList", { users: connectedUsers });
     console.log("A user disconnected");
   });
 
+  // Connects the user to the room and creates more listeners
   socket.on("joinRoom", (room, username) => {
     socket.join(room);
 
+    // Checks if a new users has been connected
     let result =
       connectedUsers.length > 0
         ? connectedUsers.find((user) => user.id === socket.id)
         : undefined;
 
+    // Adds the new user to the array
     if (result == undefined) {
       connectedUsers.push({
         id: socket.id,
@@ -59,23 +64,27 @@ io.on("connection", (socket) => {
 
     console.log("A user join room '" + room + "'");
 
+    // Sends the updated list of users to the client
     socket.on("requestUserList", () => {
       io.to(room).emit("updateUserList", { users: connectedUsers });
     });
 
+    // Removes the user from a full room and allows the client to display a message
     socket.on("removeUser", (user) => {
       if (
         socket.id === user.id &&
         connectedUsers.filter((u) => u.room === user.room).length > 2
       ) {
-        console.log("user left");
+        console.log("user was removed");
         socket.leave(user.room);
         connectedUsers = connectedUsers.filter((u) => u.id != user.id);
       }
 
+      // Sends the message ONLY to the user that was removed
       socket.to(user.id).emit("roomFull");
     });
 
+    // Tells the client to create a media offer for the second peer
     socket.on("mediaOffer", (data) => {
       socket.to(data.to).emit("mediaOffer", {
         from: data.from,
@@ -83,6 +92,7 @@ io.on("connection", (socket) => {
       });
     });
 
+    // Tells the client to create a media answer for the first peer
     socket.on("mediaAnswer", (data) => {
       socket.to(data.to).emit("mediaAnswer", {
         from: data.from,
@@ -90,16 +100,19 @@ io.on("connection", (socket) => {
       });
     });
 
+    // Tells the client to add the ICE candidate for all peers
     socket.on("iceCandidate", (data) => {
       socket.to(data.to).emit("remotePeerIceCandidate", {
         candidate: data.candidate,
       });
     });
 
+    // Sends all messages in the room to the client
     socket.on("requestMessages", () => {
       socket.emit("getMessages", { userMessages: userMessages });
     });
 
+    // Adds messages to userMessages and adds a message to the room
     socket.on("message", (message) => {
       userMessages.push({
         room: room,

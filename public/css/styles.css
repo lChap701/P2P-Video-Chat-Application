@@ -121,7 +121,8 @@ button:not(:disabled):hover {
   margin: 0 10px;
 }
 
-#chat {
+#chat,
+#back-container {
   display: none;
 }
 

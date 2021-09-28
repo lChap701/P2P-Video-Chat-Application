@@ -30,18 +30,15 @@ app.get("/:room", (req, res) => {
   res.render("index", { room: req.params.room });
 });
 
-// Array of users connected to a room
-let connectedUsers = [];
+// Socket.io Handling
+let connectedUsers = []; // Array of users connected to a room
+let userMessages = []; // Array of messages
 
 io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     connectedUsers = connectedUsers.filter((user) => user.id !== socket.id);
-
-    socket.broadcast.emit("updateUserList", {
-      users: connectedUsers,
-    });
-
-    console.log(connectedUsers);
+    socket.broadcast.emit("updateUserList", { users: connectedUsers });
+    console.log("A user disconnected");
   });
 
   socket.on("joinRoom", (room, username) => {
@@ -60,7 +57,7 @@ io.on("connection", (socket) => {
       });
     }
 
-    console.log(connectedUsers);
+    console.log("A user join room '" + room + "'");
 
     socket.on("requestUserList", () => {
       io.to(room).emit("updateUserList", { users: connectedUsers });
@@ -99,7 +96,18 @@ io.on("connection", (socket) => {
       });
     });
 
+    socket.on("requestMessages", () => {
+      socket.emit("getMessages", { userMessages: userMessages });
+    });
+
     socket.on("message", (message) => {
+      userMessages.push({
+        room: room,
+        message: message,
+        userId: socket.id,
+        username: username,
+      });
+      console.log(userMessages);
       io.to(room).emit("createMessage", message, socket.id, username);
     });
   });

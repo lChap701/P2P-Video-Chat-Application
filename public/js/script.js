@@ -83,6 +83,7 @@ socket.on("connect", () => {
       document.querySelector("#localVideo").srcObject = stream;
       stream.getTracks().forEach((track) => peer1.addTrack(track, stream));
       prompts();
+      socket.emit("requestMessages");
     })
     .catch((err) => alert(err));
 });
@@ -239,8 +240,23 @@ const gotRemoteStream = (e) => {
 
 peer2.addEventListener("track", gotRemoteStream);
 
-/* Adds messages that were recently sent */
-socket.on("createMessage", (message, userId, username) => {
+/* Gets all messages in the room */
+socket.on("getMessages", ({ userMessages }) => {
+  userMessages
+    .filter((obj) => obj.room == ROOM)
+    .forEach((obj) =>
+      addMessage(obj.userId, socket.id, obj.username, obj.message)
+    );
+});
+
+/**
+ * Adds messages to the page
+ * @param {string} userId     Represents the ID of the user
+ * @param {string} socketId   Represents the ID of the socket (the current user)
+ * @param {string} username   Represents the user's username
+ * @param {string} message    Represents the message that was sent
+ */
+const addMessage = (userId, socketId, username, message) => {
   // Setup message container
   const messageEl = document.createElement("div");
   messageEl.className = "message";
@@ -250,7 +266,7 @@ socket.on("createMessage", (message, userId, username) => {
   bUserInfo.id = "user-info";
   const icon = document.createElement("i");
   icon.className = "far fa-user-circle";
-  bUserInfo.append(icon, userId == socket.id ? "me" : username);
+  bUserInfo.append(icon, userId == socketId ? "me" : username);
   messageEl.append(bUserInfo);
 
   // Add message to container
@@ -260,4 +276,9 @@ socket.on("createMessage", (message, userId, username) => {
 
   // Add message container to the document
   messages.append(messageEl);
+};
+
+/* Adds messages that were recently sent */
+socket.on("createMessage", (message, userId, username) => {
+  addMessage(userId, socket.id, username, message);
 });

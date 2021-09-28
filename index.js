@@ -63,9 +63,7 @@ io.on("connection", (socket) => {
     console.log(connectedUsers);
 
     socket.on("requestUserList", () => {
-      io.to(room).emit("updateUserList", {
-        users: connectedUsers.filter((user) => user.room == room),
-      });
+      io.to(room).emit("updateUserList", { users: connectedUsers });
     });
 
     socket.on("removeUser", (user) => {

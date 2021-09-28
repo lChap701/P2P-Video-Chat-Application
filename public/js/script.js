@@ -133,14 +133,17 @@ socket.on("roomFull", () => {
   location.pathname = "/";
 });
 
-/* Gets the all users in the room */
+/* Gets the all users in the room to determine how to update the page */
 socket.on("updateUserList", async ({ users }) => {
-  if (users.length == 2) {
+  let usersInRoom = users.filter((user) => user.room === ROOM);
+
+  if (usersInRoom.length == 2) {
     invite.disabled = true;
-    newUser = users.filter((user) => user.id !== socket.id)[0];
+    remoteVideo.removeAttribute("style");
+    newUser = usersInRoom.filter((user) => user.id !== socket.id)[0];
     await addUser();
-  } else if (users.length > 2) {
-    socket.emit("removeUser", users[users.length - 1]);
+  } else if (usersInRoom.length > 2) {
+    socket.emit("removeUser", usersInRoom[usersInRoom.length - 1]);
   } else {
     invite.disabled = false;
     remoteVideo.style.display = "none";
@@ -231,7 +234,6 @@ socket.on("remotePeerIceCandidate", onRemotePeerIceCandidate);
  */
 const gotRemoteStream = (e) => {
   const [stream] = e.streams;
-  remoteVideo.removeAttribute("style");
   remoteVideo.srcObject = stream;
 };
 

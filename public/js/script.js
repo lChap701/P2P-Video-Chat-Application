@@ -41,6 +41,16 @@ invite.addEventListener("click", () => {
   );
 });
 
+/* Displays chat for smaller devices */
+document.querySelector("button#chat").addEventListener("click", () => {
+  document.querySelector("#message-container").style.display = "flex";
+});
+
+/* Hides chat for smaller devices */
+document.querySelector("button#back").addEventListener("click", () => {
+  document.querySelector("#message-container").style.display = "none";
+});
+
 /* Disables or enables access to camera */
 video.addEventListener("click", () => {
   const enabled = myVideoStream.getVideoTracks()[0].enabled;

@@ -242,6 +242,7 @@ input:focus {
 
   #flex {
     overflow: visible;
+    position: relative;
   }
 
   #video-container {
@@ -250,5 +251,27 @@ input:focus {
 
   #videos {
     flex-flow: column wrap;
+  }
+
+  #message-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  #back-container {
+    display: flex;
+    height: 10vh;
+    align-items: center;
+  }
+
+  #messages {
+    position: relative;
+    flex-grow: 1;
+  }
+
+  .message {
+    max-width: inherit;
   }
 }

@@ -1,11 +1,13 @@
 const socket = io("/");
-const peer = new RTCPeerConnection({
+const CONFIG = {
   iceServers: [
     {
       urls: "stun:stun.stunprotocol.org",
     },
   ],
-});
+};
+const peer1 = new RTCPeerConnection(CONFIG);
+const peer2 = new RTCPeerConnection(CONFIG);
 const message = document.querySelector("input[name='message']");
 const invite = document.querySelector("button#invite");
 const video = document.querySelector("button#video");
@@ -79,7 +81,7 @@ socket.on("connect", () => {
     .then((stream) => {
       myVideoStream = stream;
       document.querySelector("#localVideo").srcObject = stream;
-      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
+      stream.getTracks().forEach((track) => peer1.addTrack(track, stream));
       prompts();
     })
     .catch((err) => alert(err));
@@ -151,9 +153,8 @@ socket.on("updateUserList", async ({ users }) => {
  * Adds a new user to the room
  */
 const addUser = async () => {
-  console.log("addUser");
-  const localPeerOffer = await peer.createOffer();
-  await peer.setLocalDescription(localPeerOffer);
+  const localPeerOffer = await peer1.createOffer();
+  await peer1.setLocalDescription(localPeerOffer);
 
   socket.emit("mediaOffer", {
     offer: localPeerOffer,
@@ -163,16 +164,14 @@ const addUser = async () => {
 };
 
 /**
- * Creates a call for adding a new user
+ * Creates a offer for adding a new user
  * @param {*} data    Represents the data to use for adding this user
  */
 const onMediaOffer = async (data) => {
   try {
-    console.log("onMediaOffer");
-    console.log(socket.id);
-    await peer.setRemoteDescription(data.offer);
-    const peerAnswer = await peer.createAnswer();
-    await peer.setLocalDescription(peerAnswer);
+    await peer2.setRemoteDescription(data.offer);
+    const peerAnswer = await peer2.createAnswer();
+    await peer2.setLocalDescription(peerAnswer);
 
     socket.emit("mediaAnswer", {
       answer: peerAnswer,
@@ -187,13 +186,11 @@ const onMediaOffer = async (data) => {
 socket.on("mediaOffer", onMediaOffer);
 
 /**
- * Answers the call that was created
+ * Answers the offer that was created
  * @param {*} data  Represents the data that should be used to answer the call
  */
 const onMediaAnswer = async (data) => {
-  console.log("onMediaAnswer");
-  console.log(data.from);
-  await peer.setRemoteDescription(data.answer);
+  await peer1.setRemoteDescription(data.answer);
 };
 
 socket.on("mediaAnswer", onMediaAnswer);
@@ -203,15 +200,16 @@ socket.on("mediaAnswer", onMediaAnswer);
  * @param {RTCPeerConnectionIceEvent} e   Represents the event that occurred
  */
 const onIceCandidateEvent = (e) => {
-  console.log("onIceCandidateEvent");
-
-  socket.emit("iceCandidate", {
-    to: newUser.id,
-    candidate: e.candidate,
-  });
+  if (Boolean(e) || e.candidate) {
+    socket.emit("iceCandidate", {
+      to: newUser.id,
+      candidate: e.candidate,
+    });
+  }
 };
 
-peer.onicecandidate = onIceCandidateEvent;
+peer1.onicecandidate = onIceCandidateEvent;
+peer2.onicecandidate = onIceCandidateEvent;
 
 /**
  * Transfers the ICE candidate to another peer
@@ -219,8 +217,8 @@ peer.onicecandidate = onIceCandidateEvent;
  */
 const onRemotePeerIceCandidate = async (data) => {
   try {
-    console.log("onRemotePeerIceCandidate");
-    await peer.addIceCandidate(new RTCIceCandidate(data.candidate));
+    await peer1.addIceCandidate(new RTCIceCandidate(data.candidate));
+    await peer2.addIceCandidate(new RTCIceCandidate(data.candidate));
   } catch (err) {
     console.error(err);
   }
@@ -234,13 +232,12 @@ socket.on("remotePeerIceCandidate", onRemotePeerIceCandidate);
  * @param {RTCTrackEvent} e   Represents the event that occurred
  */
 const gotRemoteStream = (e) => {
-  console.log("gotRemoteStream");
   const [stream] = e.streams;
   remoteVideo.removeAttribute("style");
   remoteVideo.srcObject = stream;
 };
 
-peer.addEventListener("track", gotRemoteStream);
+peer2.addEventListener("track", gotRemoteStream);
 
 /* Adds messages that were recently sent */
 socket.on("createMessage", (message, userId, username) => {

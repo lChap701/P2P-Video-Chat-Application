@@ -135,8 +135,6 @@ socket.on("roomFull", () => {
 
 /* Gets the all users in the room */
 socket.on("updateUserList", async ({ users }) => {
-  console.log(users);
-
   if (users.length == 2) {
     invite.disabled = true;
     newUser = users.filter((user) => user.id !== socket.id)[0];

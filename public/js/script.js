@@ -152,7 +152,6 @@ socket.on("updateUserList", async ({ users }) => {
  */
 const addUser = async () => {
   console.log("addUser");
-  console.log(socket.id);
   const localPeerOffer = await peer.createOffer();
   await peer.setLocalDescription(localPeerOffer);
 
@@ -193,7 +192,7 @@ socket.on("mediaOffer", onMediaOffer);
  */
 const onMediaAnswer = async (data) => {
   console.log("onMediaAnswer");
-  console.log(socket.id);
+  console.log(data.from);
   await peer.setRemoteDescription(data.answer);
 };
 

@@ -107,7 +107,6 @@ io.on("connection", (socket) => {
         userId: socket.id,
         username: username,
       });
-      console.log(userMessages);
       io.to(room).emit("createMessage", message, socket.id, username);
     });
   });

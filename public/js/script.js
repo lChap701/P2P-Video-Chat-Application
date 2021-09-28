@@ -202,12 +202,10 @@ socket.on("mediaAnswer", onMediaAnswer);
  * @param {RTCPeerConnectionIceEvent} e   Represents the event that occurred
  */
 const onIceCandidateEvent = (e) => {
-  if (Boolean(e) || e.candidate) {
-    socket.emit("iceCandidate", {
-      to: newUser.id,
-      candidate: e.candidate,
-    });
-  }
+  socket.emit("iceCandidate", {
+    to: newUser.id,
+    candidate: e.candidate,
+  });
 };
 
 peer1.onicecandidate = onIceCandidateEvent;

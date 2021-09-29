@@ -133,11 +133,6 @@ const prompts = () => {
       }
     }
 
-    // Username Validation
-    if (username == null || username.trim().length == 0) {
-      location.reload();
-    }
-
     // Saves username in localStorage
     localStorage.setItem(
       "username",

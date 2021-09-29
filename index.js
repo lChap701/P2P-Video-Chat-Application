@@ -8,6 +8,12 @@
 require("dotenv").config();
 
 const express = require("express");
+
+/**
+ * Module that contains the entire application
+ * @module ./index
+ *
+ */
 const app = express();
 
 // Socket.io Setup
@@ -148,3 +154,5 @@ io.on("connection", (socket) => {
 const listener = server.listen(process.env.PORT || 8080, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
+
+module.exports = app; // For unit testing

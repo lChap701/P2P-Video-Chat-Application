@@ -21,6 +21,10 @@ const io = new Server(server, {
   },
 });
 
+// Helmet Setup
+const helmet = require("helmet");
+app.use(helmet.xssFilter());
+
 // Allows stylesheets, JS scripts, and other files to be loaded
 app.use(express.static(__dirname + "/public"));
 

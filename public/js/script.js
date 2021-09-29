@@ -104,25 +104,39 @@ socket.on("connect", () => {
 const prompts = () => {
   // Checks if the user has joined a room
   if (document.querySelector("#video-container h2").innerText == "") {
-    let room = prompt("Please enter the name of this room", "Room-1");
+    let room = "";
 
     // Room Validation
-    if (room == null || room.trim().length == 0) location.reload();
+    while (room == null || room.trim().length == 0) {
+      room = prompt("Please enter the name of this room", "Room-1");
+    }
 
     // Gets the desired username
     let username = localStorage.getItem("username");
+    let valid = false;
 
     // Checks if the user has entered a username or if the username should change
     if (localStorage.getItem("username")) {
       if (!confirm("Do you wish to keep your username?")) {
-        username = prompt("Please enter your new username", username);
+        while (!valid) {
+          username = prompt(
+            "Please enter your new username",
+            localStorage.getItem("username")
+          );
+          if (username != null && username.trim().length > 0) valid = true;
+        }
       }
     } else {
-      username = prompt("Please enter your username", "john-smith");
+      while (!valid) {
+        username = prompt("Please enter your username", "john-smith");
+        if (username != null && username.trim().length > 0) valid = true;
+      }
     }
 
     // Username Validation
-    if (username == null || username.trim().length == 0) location.reload();
+    if (username == null || username.trim().length == 0) {
+      location.reload();
+    }
 
     // Saves username in localStorage
     localStorage.setItem(

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node test.js"
+    "test": "mocha --timeout 5000 --recursive --exit --ui tdd tests/"
   },
   "repository": {
     "type": "git",
@@ -24,10 +24,13 @@
   },
   "homepage": "https://github.com/lChap701/P2P-Video-Chat-Application#readme",
   "dependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "mocha": "^9.1.2",
     "socket.io": "^4.2.0"
   }
 }

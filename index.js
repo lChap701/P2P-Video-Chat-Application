@@ -1,3 +1,10 @@
+/*
+ * Created by Lucas Chapman
+ *
+ * This project was based on https://p2p-video-chat-application.freecodecamp.rocks/
+ * for the purposes of creating a project for freeCodeCamp
+ */
+
 require("dotenv").config();
 
 const express = require("express");

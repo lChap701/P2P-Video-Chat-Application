@@ -184,11 +184,8 @@ const addUser = async () => {
   });
 };
 
-/**
- * Creates a offer for adding a new user
- * @param {*} data    Represents the data to use for adding this user
- */
-const onMediaOffer = async (data) => {
+/* Creates a offer for adding a new user */
+socket.on("mediaOffer", async (data) => {
   try {
     await peer2.setRemoteDescription(data.offer);
     const peerAnswer = await peer2.createAnswer();
@@ -202,19 +199,12 @@ const onMediaOffer = async (data) => {
   } catch (err) {
     console.error(err);
   }
-};
+});
 
-socket.on("mediaOffer", onMediaOffer);
-
-/**
- * Answers the offer that was created
- * @param {*} data  Represents the data that should be used to answer the call
- */
-const onMediaAnswer = async (data) => {
+/* Answers the offer that was created */
+socket.on("mediaAnswer", async (data) => {
   await peer1.setRemoteDescription(data.answer);
-};
-
-socket.on("mediaAnswer", onMediaAnswer);
+});
 
 /**
  * Creates the ICE candidate
@@ -230,32 +220,21 @@ const onIceCandidateEvent = (e) => {
 peer1.onicecandidate = onIceCandidateEvent;
 peer2.onicecandidate = onIceCandidateEvent;
 
-/**
- * Transfers the ICE candidate to another peer
- * @param {*} data    Represents the data to transfer
- */
-const onRemotePeerIceCandidate = async (data) => {
+/* Transfers the ICE candidate to another peer */
+socket.on("remotePeerIceCandidate", async (data) => {
   try {
     await peer1.addIceCandidate(new RTCIceCandidate(data.candidate));
     await peer2.addIceCandidate(new RTCIceCandidate(data.candidate));
   } catch (err) {
     console.error(err);
   }
-};
+});
 
-socket.on("remotePeerIceCandidate", onRemotePeerIceCandidate);
-
-/**
- * Adds the other stream to the peer
- *
- * @param {RTCTrackEvent} e   Represents the event that occurred
- */
-const gotRemoteStream = (e) => {
+/* Adds the other stream to the peer */
+peer2.addEventListener("track", (e) => {
   const [stream] = e.streams;
   remoteVideo.srcObject = stream;
-};
-
-peer2.addEventListener("track", gotRemoteStream);
+});
 
 /* Gets all messages in the room */
 socket.on("getMessages", ({ userMessages }) => {

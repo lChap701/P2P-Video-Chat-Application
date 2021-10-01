@@ -30,17 +30,17 @@
 body {
   font-family: "Open Sans", sans-serif;
   color: var(--text-color);
-}
-
-body > header {
-  height: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: var(--dark-grey);
 }
 
 header {
+  height: 10vh;
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: var(--dark-grey);
+  padding: 0 10px;
 }
 
 h2 {
@@ -79,6 +79,21 @@ button:not(:disabled):hover {
   filter: brightness(80%);
 }
 
+input {
+  font-family: inherit;
+  display: inline-block;
+  width: 100%;
+  border: 1px solid var(--border-color-main);
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+input:hover,
+input:focus {
+  border-color: var(--border-color-secondary);
+}
+
 #flex {
   height: 90vh;
   display: flex;
@@ -93,6 +108,7 @@ button:not(:disabled):hover {
   align-items: center;
   background: var(--medium-dark-grey);
   height: 100%;
+  position: relative;
 }
 
 #videos {
@@ -113,7 +129,6 @@ button:not(:disabled):hover {
   display: flex;
   align-items: center;
   flex: 1;
-  height: 15vh;
   padding: 0 10px;
 }
 
@@ -175,24 +190,15 @@ button:not(:disabled):hover {
 #message-control {
   flex: 1;
   height: 10vh;
+  min-height: 60px;
   padding: 10px;
   display: flex;
+  align-items: center;
   background: var(--medium-dark-grey);
 }
 
-input {
-  font-family: inherit;
-  display: inline-block;
-  width: 100%;
-  border: 1px solid var(--border-color-main);
-  padding: 10px;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-input:hover,
-input:focus {
-  border-color: var(--border-color-secondary);
+#message-control * {
+  max-height: 50px;
 }
 
 /* Media Queries */
@@ -209,19 +215,47 @@ input:focus {
     padding: 10px;
   }
 
-  #chat {
-    display: flex;
-  }
-
   #message-container {
     display: none;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  #back-container {
+    display: flex;
+    height: 8vh;
+    min-height: 50px;
+    align-items: center;
+    width: 100vw;
+    background: var(--medium-dark-grey);
+    margin-left: -10px;
+    padding-left: 10px;
+  }
+
+  #messages {
+    position: relative;
+    flex-grow: 1;
+  }
+
+  .message {
+    max-width: inherit;
+  }
+
+  #message-control {
+    flex: initial;
+  }
+
+  #chat {
+    display: flex;
   }
 }
 
 @media only screen and (max-width: 840px) {
   header {
     text-align: center;
-    height: auto !important;
   }
 
   h2 {
@@ -243,7 +277,6 @@ input:focus {
 
   #flex {
     overflow: visible;
-    position: relative;
   }
 
   #video-container {
@@ -253,26 +286,71 @@ input:focus {
   #videos {
     flex-flow: column wrap;
   }
+}
 
-  #message-container {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    flex-direction: column;
+@media only screen and (max-width: 444px) {
+  header {
+    height: auto;
+  }
+}
+
+@media only screen and (max-width: 365px) and (min-height: 539px) {
+  #videos {
+    flex: 1;
   }
 
-  #back-container {
-    display: flex;
-    height: 10vh;
-    align-items: center;
+  #options {
+    flex: initial;
+  }
+}
+
+@media only screen and (min-height: 1150px) {
+  video {
+    height: 400px;
+  }
+}
+
+@media only screen and (min-height: 960px) {
+  body {
+    font-size: 1.5rem;
   }
 
-  #messages {
-    position: relative;
-    flex-grow: 1;
+  button,
+  input {
+    font-size: 1.4rem;
   }
 
-  .message {
-    max-width: inherit;
+  video {
+    height: 300px;
+  }
+
+  button {
+    padding: 20px;
+  }
+}
+
+@media only screen and (min-height: 690px) {
+  body {
+    font-size: 1.25rem;
+  }
+
+  button,
+  input {
+    font-size: 1.1rem;
+  }
+
+  button {
+    padding: 15px;
+  }
+}
+
+@media only screen and (max-height: 529px) {
+  h2 {
+    height: auto;
+  }
+
+  #flex {
+    height: auto;
+    overflow: visible;
   }
 }

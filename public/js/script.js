@@ -12,10 +12,17 @@ const message = document.querySelector("input[name='message']");
 const invite = document.querySelector("button#invite");
 const video = document.querySelector("button#video");
 const audio = document.querySelector("button#audio");
+const msgContainer = document.querySelector("#message-container");
 const messages = document.querySelector("#messages");
 const remoteVideo = document.querySelector("#remoteVideo");
 let myVideoStream;
 let newUser;
+
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 1190) {
+    msgContainer.removeAttribute("style");
+  }
+});
 
 /* Attempts to send a message when the 'send' button is clicked */
 document.querySelector("button#send").addEventListener("click", () => {
@@ -43,12 +50,12 @@ invite.addEventListener("click", () => {
 
 /* Displays chat for smaller devices */
 document.querySelector("button#chat").addEventListener("click", () => {
-  document.querySelector("#message-container").style.display = "flex";
+  msgContainer.style.display = "flex";
 });
 
 /* Hides chat for smaller devices */
 document.querySelector("button#back").addEventListener("click", () => {
-  document.querySelector("#message-container").style.display = "none";
+  msgContainer.style.display = "none";
 });
 
 /* Disables or enables access to camera */

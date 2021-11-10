@@ -72,7 +72,7 @@ io.on("connection", (socket) => {
       userMessages = userMessages.filter((obj) => obj.room !== room);
     }
 
-    // Checks if a new users has been connected
+    // Checks if a new user has been connected
     let result =
       connectedUsers.length > 0
         ? connectedUsers.find((user) => user.id === socket.id)

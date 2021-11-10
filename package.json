@@ -23,6 +23,7 @@
     "url": "https://github.com/lChap701/P2P-Video-Chat-Application/issues"
   },
   "homepage": "https://github.com/lChap701/P2P-Video-Chat-Application#readme",
+  "website": "https://P2P-Video-Chat-Application.lchap701.repl.co",
   "dependencies": {
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
